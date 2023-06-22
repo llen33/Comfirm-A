@@ -1,0 +1,102 @@
+body{
+    background-image: url(image/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+  
+  /* Registration page */
+
+  input[type=text], input[type=password], input[type=email] {    
+    width: 100%;
+    padding: 12px 20px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: optima;
+    font-size: 15px;
+
+  } 
+
+  input[type=submit]{
+    width: 100%;
+    background-color: #897a99ec;
+    color: white;
+    padding: 15px ;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Luminari;
+
+  }
+
+  .tittle{
+    font-family: Luminari;
+    text-align: center;
+  }
+
+  .regisbox{
+    padding: 20px; 
+    border: 3px solid #897a99ec; 
+    margin: auto; 
+    width: 30%; 
+    font-family: optima;
+  }
+
+  .regisform{
+    font-family: optima;
+    padding: 10px;
+    color: #4b3c5b
+
+  }
+
+  .message{
+    background-color: #b1cf98;
+    color: #314f18 ;
+    padding: 10px;
+    margin: 10px 0px;
+    width: 100%;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.error-message{
+  background-color: #b97070;
+  color: #314f18 ;
+  padding: 10px;
+  margin: 10px 0px;
+  width: 100%;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.message{
+  background-color: #b1cf98;
+  color: #314f18 ;
+  padding: 10px;
+  margin: 10px 0px;
+  width: 100%;
+  border-radius: 5px;
+  text-align: center;
+}
+  
+  /* login page */
+  
+  .error{
+    background-color: #f2dede;
+    color: #a94442 ;
+    padding: 10px;
+    width: 95%;
+    border-radius: 5px;
+  }
+
+  .loginbox{
+    padding: 20px; 
+    border: 3px solid #897a99ec; 
+    margin: auto; 
+    width: 30%; 
+    font-family: optima;
+  
+  }
