@@ -1,0 +1,206 @@
+/* body */
+* {
+    margin: 0px;
+    padding: auto;
+    box-sizing: border-box;
+    font-family: "Times New Roman", Times, serif;
+}
+
+body{
+    background-image: url(image/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+/* header */
+.top-nav-bar {
+    background-color: #5b5264;
+    display: flex;
+    justify-content: space-around;  
+    align-items: center;
+    line-height: 4rem;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+.title-left h1 {
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    float: left;
+    margin-top: 10px;
+    font-family: Trattatello;
+}
+    
+.head_logo{
+    border-radius: 50% ;
+    height: 60px;
+    width: 60px;
+    margin: 10px;
+    float: left;
+}
+
+.list-right ul {
+    list-style: none;
+    display: flex;
+    float: left;
+}
+
+.list-right{
+    padding-left: 500px;
+}
+
+.list-right ul li a {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 1s;
+    font-family: Marker Felt;
+    letter-spacing: 3px;
+    font-size: 18px;
+}
+
+.list-right ul li a:hover {
+    background-color: #fff;
+    border-radius: 7px;
+    color: rgb(22, 7, 36);
+}
+
+
+.title {
+    text-align: center;
+    font-family: Luminari;
+    padding: 20px;
+}
+
+/* about seller form */
+.about-seller-container{
+    padding: 25px; 
+    border: 2px solid #887f92;
+    background-color: rgba(221, 204, 238, 0.7);
+    border-radius: 15px;
+    margin-left: 18%; 
+    width: 65%; 
+    font-size: 17px;
+    min-height: 200px;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.info {
+    padding-top: 5px;
+}
+
+.seller-name, .phone-number, .school {
+    float: left;
+    width: 50%;
+    padding: 10px;
+}
+
+.bio {
+    float: left;
+    width: 100%;
+    padding: 10px;
+    word-wrap: break-word; /* Wrap the text onto the next line */
+}
+
+.gender, .email, .contact-seller{
+    float: right;
+    width: 50%;
+    padding: 10px;
+}
+
+button {
+    width: 98%;
+    background-color: #897a99ec;
+    color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* footer */
+.footer {
+    background-color: #5b5264;
+    border-bottom: 6px solid rgb(112, 107, 116);
+    width: 100%;
+    margin-top: 30px;
+    bottom: 0;
+}
+
+.foo_container{
+    display: flex;
+}
+
+.foo_container > div{
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.foo_logo{
+    border-radius: 50% ;
+    height: 150px;
+    width: 150px;
+}
+
+.list{
+    font-size: 15px;
+    cursor: pointer;
+    list-style: none;
+    text-align: center;
+}
+
+.list li{
+    padding: 15px 0px;
+    text-align: center;
+
+}
+.list li a{
+    color: #cecccc;
+    font-family: Marker Felt;
+    letter-spacing: 2px;
+}
+
+.foo_s_title{
+    color: #aea9a9;
+    font-family: Marker Felt;
+    letter-spacing: 2px;
+    font-size: 20px;
+    text-align: center;
+    border-bottom: 2px dotted slategray;
+}
+
+.foo_c_title{
+    text-align: center;
+    font-family: Trattatello;
+    color: #aea9a9;
+    font-size: 20px;
+
+}
+
+.contact_us a{
+    color: #aea9a9;
+    font-family: Marker Felt;
+    letter-spacing: 2px;
+    font-size: 20px;
+    text-align: center;
+
+}
+
+.foo_right{
+    padding: 15px 0px;
+
+}
