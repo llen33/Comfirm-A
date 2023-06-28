@@ -107,7 +107,7 @@
                     <li><a href="index_seller.php">Home</a></li>
                     <li><a href="#">Products</a></li>
                     <li><a href="seller_profile.php">Profile</a></li>
-                    <li><a href="index.php">Logout</a></li>
+                    <li><a href="logout.php">Logout</a></li>
 
                 </ul>
 

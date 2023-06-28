@@ -100,9 +100,8 @@
                 <ul class="list">
 
                     <li><a href="index_seller.php">Home</a></li>
-                    <li><a href="#">Products</a></li>
                     <li><a href="seller_profile.php">Profile</a></li>
-                    <li><a href="index.php">Logout</a></li>
+                    <li><a href="logout.php">Logout</a></li>
 
                 </ul>
 
@@ -122,7 +121,7 @@
                     <li><a href="add_product.php">Add Product</a></li>
                     <li><a href="product_list.php">Product Added List</a></li>
                     <li><a href="seller_profile.php">Profile</a></li>
-                    <li><a href="#">Payment</a></li>
+                    <li><a href="seller_order.php">Order</a></li>
 
                 </ul>
 

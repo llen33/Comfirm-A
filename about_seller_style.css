@@ -111,7 +111,7 @@ body{
     word-wrap: break-word; /* Wrap the text onto the next line */
 }
 
-.gender, .email, .contact-seller{
+.gender, .email{
     float: right;
     width: 50%;
     padding: 10px;

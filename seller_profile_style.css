@@ -14,7 +14,7 @@ body{
 }
 
 /* header */
-.top-nav-bar {
+.top-nav-bar { 
     background-color: #5b5264;
     display: flex;
     justify-content: space-around;  

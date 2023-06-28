@@ -31,7 +31,7 @@
                         SET users.firstname = ?,
                             users.lastname = ?,
                             users.gender = ?,
-                            users.birth_date = ?,
+                            users.birthdate = ?,
                             users.username = ?,
                             users.email = ?,
                             users.phone_number = ?,
@@ -74,7 +74,7 @@
         $firstname = $row['firstname'];
         $lastname = $row['lastname'];
         $gender = $row['gender'];
-        $birthdate = $row['birth_date'];
+        $birthdate = $row['birthdate'];
         $username = $row['username'];
         $email = $row['email'];
         $phoneNumber = $row['phone_number'];
@@ -124,7 +124,7 @@
                     <li><a href="index_seller.php">Home</a></li>
                     <li><a href="#">Products</a></li>
                     <li><a href="seller_profile.php">Profile</a></li>
-                    <li><a href="index.php">Logout</a></li>
+                    <li><a href="logout.php">Logout</a></li>
 
                 </ul>
 
@@ -197,7 +197,7 @@
                     <!-- optional field -->
                     <div class="s_birthdate">
 
-                        <label for="seller-birthdate" class="l_birthdate">Birth Date:</label><br>
+                        <label for="seller_birthdate" class="l_birthdate">Birth Date:</label><br>
 
                         <input type="date" value="<?php echo $birthdate; ?>" name="seller_birthdate" class="birthdate"><br>
 

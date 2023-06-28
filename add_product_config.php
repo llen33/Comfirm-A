@@ -1,5 +1,5 @@
 <?php
 
-    $conn = mysqli_connect('localhost', 'root', '', 'student_marketplace')
+    $conn = mysqli_connect('localhost', 'root', '', 'student_marketplace23')
     
 ?>
