@@ -1,46 +1,36 @@
 <?php
-
     session_start();
-
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-
     @include 'add_product_config.php';
 
-    // Retrieve the seller_id from the URL parameter
-    if (isset($_GET['seller_id'])) {
+    // Get the order ID from the URL parameter
+    $order_id = $_GET['order_id'];
 
-        $seller_id = $_GET['seller_id'];
+    // Retrieve buyer details based on the order ID
+    $buyerQuery = "SELECT * FROM users WHERE user_id IN (SELECT user_id FROM test_order WHERE order_id = $order_id)";
+    $buyerResult = mysqli_query($conn, $buyerQuery);
 
-        // Construct the SQL query to fetch seller information
-        $sql = "SELECT * FROM seller
-                JOIN users ON seller.user_id = users.user_id
-                WHERE seller.seller_id = $seller_id";
-
-        // Execute the query
-        $result = $conn->query($sql);
-
-        // Check if any rows were returned
-        if ($result->num_rows > 0) {
-            // Fetch the seller information
-            $seller = $result->fetch_assoc();
-
-            $firstname = $seller['firstname'];
-            $lastname = $seller['lastname'];
-            $gender = $seller['gender'];
-            $email = $seller['email'];
-            $phoneNumber = $seller['phone_number'];
-            $bio = $seller['bio'];
-            $school = $seller['school'];
-
-        } else {
-
-            echo "Seller not found.";
-
-        }
-
+    if (!$buyerResult) {
+        die("Error: " . mysqli_error($conn));
     }
 
+    // Check if any rows were returned
+    if ($buyerResult->num_rows > 0) {
+        // Fetch the seller information
+        $buyer = $buyerResult->fetch_assoc();
+
+        $firstname = $buyer['firstname'];
+        $lastname = $buyer['lastname'];
+        $homeAddress = $buyer['home_address'];
+        $email = $buyer['email'];
+        $phoneNumber = $buyer['phone_number'];
+
+    } else {
+
+        echo "Seller not found.";
+
+    }
 ?>
 
 <!DOCTYPE html>
@@ -50,16 +40,16 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>About Seller</title>
+        <title>Buyer's Details</title>
 
         <!-- font awesome cdn link  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         <!-- custom css file link -->
-        <link rel="stylesheet" href="about_seller_style.css" type="text/css">
+        <link rel="stylesheet" href="seller_get_buyer_details_style.css" type="text/css">
 
         <!-- javascript link -->
-        <script src="about_seller_javascript.js"></script>
+        <script src="seller_get_buyer_details_javascript.js"></script>
 
     </head>
 
@@ -79,7 +69,6 @@
                 <ul class="list">
 
                     <li><a href="index_seller.php">Home</a></li>
-                    <li><a href="#">Products</a></li>
                     <li><a href="seller_profile.php">Profile</a></li>
                     <li><a href="index.php">Logout</a></li>
 
@@ -89,30 +78,30 @@
 
         </nav>
 
-        <h2 class="title">About Seller</h2>
+        <h2 class="title">Buyer's Details</h2>
 
         <div class="container">
 
-            <div class="about-seller-container">
+            <div class="about-buyer-container">
 
-                <div class="seller-name">
+                <div class="buyer-name">
 
-                    <p class="label">Seller Name: </p>
+                    <p class="label">Buyer Name: </p>
                     <p class="info"><?php echo $firstname; ?><?php echo " " ?><?php echo $lastname; ?></p><br>
 
                 </div>
 
-                <div class="gender">
+                <div class="home-address">
 
-                    <p class="label">Gender: </p>
-                    <p class="info"><?php echo $gender; ?></p><br>
+                    <p class="label">Home Address: </p>
+                    <p class="info"><?php echo $homeAddress; ?></p><br>
 
                 </div>
 
                 <div class="email">
 
                     <p class="label">Email: </p>
-                    <p class="info"><a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></p><br>
+                    <p class="info"><?php echo $email; ?></p><br>
 
                 </div>
 
@@ -120,20 +109,6 @@
 
                     <p class="label">Phone Number: </p>
                     <p class="info"><?php echo $phoneNumber; ?></p><br>
-
-                </div>
-
-                <div class="bio">
-
-                    <p class="label">Bio: </p>
-                    <p class="info"><?php echo $bio; ?></p><br>
-
-                </div>
-
-                <div class="school">
-
-                    <p class="label">School: </p>
-                    <p class="info"><?php echo $school; ?></p><br>
 
                 </div>
 
