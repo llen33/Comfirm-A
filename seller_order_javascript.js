@@ -1,3 +1,5 @@
+// This code is written by Eng Jing Yi (CSD21005) 
+
 function confirmShipOut(orderId) {
 
     if (confirm("Are you sure you want to ship out this order?")) {
