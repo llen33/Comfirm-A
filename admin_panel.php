@@ -8,7 +8,9 @@ if (!isset($_SESSION['AdminLoginId'])) {
     exit();
 }
 
+
 @include 'config.php'; // Assuming your config file is named config.php
+
 
 // Pagination variables
 $limit = 10; // Number of records to show per page
@@ -34,7 +36,8 @@ if (!$result) {
 }
 
 // Function to fetch user details
-function fetchUserDetails($conn, $userId) {
+function fetchUserDetails($conn, $userId)
+{
     $query = "SELECT * FROM users WHERE user_id = $userId AND role = 'buyer'";
     $result = mysqli_query($conn, $query);
 
@@ -216,7 +219,10 @@ function fetchUserDetails($conn, $userId) {
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Total</th>
+                    <th>Seller</th>
+                    <th>Buyer</th>
                     <th>Payment Method</th>
+                    <th>Release Payment</th>
                 </tr>
             </thead>
             <tbody>
@@ -230,7 +236,10 @@ function fetchUserDetails($conn, $userId) {
                     echo "<td>{$row['price']}</td>";
                     echo "<td>{$row['quantity']}</td>";
                     echo "<td>{$row['total']}</td>";
+                    echo "<td>{$row['status']}</td>";
+                    echo "<td>{$row['buyer_status']}</td>";
                     echo "<td>{$row['payment_method']}</td>";
+                    echo "<td><button class='release-payment' data-orderid='{$row['order_id']}'>Release Payment</button></td>";
                     echo "</tr>";
                 }
                 ?>
@@ -303,7 +312,7 @@ function fetchUserDetails($conn, $userId) {
 
             if (userDetails) {
                 var row = document.createElement("tr");
-               
+
 
                 row = document.createElement("tr");
                 row.innerHTML = "<td>Username</td><td>" + userDetails.username + "</td>";
@@ -332,6 +341,40 @@ function fetchUserDetails($conn, $userId) {
         closeButton.addEventListener("click", function() {
             document.getElementById("userDetailsModal").style.display = "none";
         });
+
+        // When the user clicks the release payment button, update the admin_status column
+        // When the user clicks the release payment button, update the admin_status column
+        var releasePaymentButtons = document.getElementsByClassName("release-payment");
+        for (var i = 0; i < releasePaymentButtons.length; i++) {
+            releasePaymentButtons[i].addEventListener("click", function(e) {
+                var orderId = e.target.dataset.orderid;
+                updateAdminStatus(orderId);
+            });
+        }
+
+        // Function to update the admin_status column
+        function updateAdminStatus(orderId) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Successful update
+                        // Display an alert message
+                        alert("Payment release was done for Order ID: " + orderId);
+                        // You can optionally perform any additional actions here
+                        console.log("Payment released for Order ID: " + orderId);
+                        location.reload(); // Reload the page to reflect the updated admin_status
+                    } else {
+                        // Error occurred
+                        console.error("Error updating admin_status for Order ID: " + orderId);
+                    }
+                }
+            };
+
+            xhr.open("POST", "update_admin_status.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send("order_id=" + orderId);
+        }
     </script>
 
     <?php

@@ -3,14 +3,14 @@ session_start();
 @include 'config.php';
 
 // Check if user is logged in and has the role of "buyer", redirect if not
-if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'buyer') {
-    header("Location:login.php");
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'buyer') {
+    header("Location: login.php");
     exit;
 }
 
 // Redirect the user to the cart page if the cart is empty or not set
 if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart']) || count($_SESSION['cart']) === 0) {
-    header('location: cart.php');
+    header('Location: cart.php');
     exit();
 }
 
@@ -19,8 +19,31 @@ $totalPrice = 0;
 foreach ($_SESSION['cart'] as $cartItem) {
     $totalPrice += $cartItem['price'] * $cartItem['quantity'];
 }
-?>
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
+    $buyer_id = $_SESSION['user_id'];
+
+    // Insert order details into the orders table
+    foreach ($_SESSION['cart'] as $cartItem) {
+        $product_id = $cartItem['id'];
+        $product_name = mysqli_real_escape_string($conn, $cartItem['name']);
+        $product_price = $cartItem['price'];
+        $quantity = $cartItem['quantity'];
+
+        mysqli_query($conn, "INSERT INTO orders (buyer_id, product_id, product_name, price, quantity) VALUES ('$buyer_id', '$product_id', '$product_name', '$product_price', '$quantity')");
+
+        // Update the product quantity in the products table
+        mysqli_query($conn, "UPDATE products SET quantity = quantity - $quantity WHERE product_id = $product_id");
+    }
+
+    // Clear the cart
+    $_SESSION['cart'] = [];
+
+    // Redirect to the order confirmation page
+    header('Location: order_confirmation.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -200,56 +223,61 @@ foreach ($_SESSION['cart'] as $cartItem) {
             </ul>
         </div>
     </nav>
-    <h1>Checkout</h1>
-    <table>
-        <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-        </tr>
-        <?php
-        foreach ($_SESSION['cart'] as $cartItem) {
-            // Fetch the product details from the database
-            $productQuery = mysqli_query($conn, "SELECT * FROM products WHERE product_id = " . $cartItem['id']);
-            $product = mysqli_fetch_assoc($productQuery);
+    <div class="container">
+        <h1>Checkout</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_SESSION['cart'] as $cartItem) : ?>
+                    <?php
+                    // Fetch the product details from the database
+                    $productQuery = mysqli_query($conn, "SELECT * FROM products WHERE product_id = " . $cartItem['id']);
+                    $product = mysqli_fetch_assoc($productQuery);
 
-            // Retrieve the image path for the current product
-            $result = mysqli_query($conn, "SELECT * FROM image WHERE product_id = " . $cartItem['id']);
-            $image = mysqli_fetch_assoc($result);
+                    // Retrieve the image path for the current product
+                    $imageQuery = mysqli_query($conn, "SELECT * FROM image WHERE product_id = " . $cartItem['id']);
+                    $image = mysqli_fetch_assoc($imageQuery);
 
-            $total = $cartItem['quantity'] * $product['price'];
-            ?>
-            <tr>
-                <td><img src="<?php echo $image['path']; ?>" alt="Product Image"></td>
-                <td><?php echo $product['name']; ?></td>
-                <td><?php echo $product['price']; ?></td>
-                <td><?php echo $cartItem['quantity']; ?></td>
-                <td><?php echo $total; ?></td>
-            </tr>
-        <?php } ?>
-    </table>
-    <div class="total-price">
-        Total Price:RM <?php echo $totalPrice; ?>
-    </div>
-    <div class="payment-form">
-        <form action="order.php" method="post">
-            <!-- Include any additional input fields for the payment form -->
-            <p>Select Payment Method:</p>
-            <input type="radio" id="online_payment" name="payment_method" value="online_payment">
-            <label for="online_payment">Online Payment</label><br>
-            <input type="radio" id="cash_on_delivery" name="payment_method" value="cash_on_delivery">
-            <label for="cash_on_delivery">Cash on Delivery</label><br>
-            <input type="radio" id="credit_debit_card" name="payment_method" value="credit_debit_card">
-            <label for="credit_debit_card">Credit/Debit Card</label><br><br>
+                    $total = $cartItem['quantity'] * $product['price'];
+                    ?>
+                    <tr>
+                        <td><img src="<?php echo $image['path']; ?>" alt="Product Image"></td>
+                        <td><?php echo $product['name']; ?></td>
+                        <td><?php echo $product['price']; ?></td>
+                        <td><?php echo $cartItem['quantity']; ?></td>
+                        <td><?php echo $total; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="total-price">
+            Total Price: RM <?php echo $totalPrice; ?>
+        </div>
+        <div class="payment-form">
+            <form action="order.php" method="post">
+                <!-- Include any additional input fields for the payment form -->
+                <p>Select Payment Method:</p>
+                <input type="radio" id="online_payment" name="payment_method" value="online_payment">
+                <label for="online_payment">Online Payment</label><br>
+                <input type="radio" id="cash_on_delivery" name="payment_method" value="cash_on_delivery">
+                <label for="cash_on_delivery">Cash on Delivery</label><br>
+                <input type="radio" id="credit_debit_card" name="payment_method" value="credit_debit_card">
+                <label for="credit_debit_card">Credit/Debit Card</label><br><br>
 
-            
-            <button type="submit" class="payment-btn">Make Payment</button>
-        </form>
-    </div>
-    <div class="back-to-cart">
-        <a href="cart.php" class="back-to-cart-btn">Go Back to Cart</a>
+                <button type="submit" class="payment-btn">Make Payment</button>
+            </form>
+        </div>
+        <div class="back-to-cart">
+            <button class="back-button" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+        </div>
     </div>
 </body>
 
