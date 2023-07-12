@@ -44,7 +44,7 @@
 
 
 
-        @import url('https://fonts.googleapis.com/css2?family=Poppins&family=Ubuntu:wght@300;700&display=swap');
+
 
         .navbar {
             background-color: #222;
@@ -140,13 +140,10 @@
             }
         }
 
-
-
-
         body {
             background: #304352;
             background: -webkit-linear-gradient(to right, #b0c2d1, #d7d2cc);
-            background: linear-gradient(to right, #b0c2d1, #d7d2cc);
+            background: linear-gradient(to right, #6A8DC4, #6EAFC4);
             min-height: 100vh;
         }
 
@@ -226,10 +223,7 @@
                     <h3>How the fees for per order works?</h3>
                     </p>
                     <p class="lead mb-0">For every succesful pruchase we will deduct 10% from the total. let's day your order total in RM 10.00 then as a fees per order we will deduct RM 1. Remaining RM 9 is your revenue for the order and it will automatically store i MyWallet under your profile once user received the order.</p><br>
-                    <p class="lead mb-0">
-                    <h3>How can i transfer my money from MyWallet to my Bank Account?</h3>
-                    </p>
-                    <p class="lead mb-0">You can go to MyWallet option can click transfer money to your bank account.</p>
+                    
                 </div>
                 <div id="contact" role="tabpanel" aria-labelledby="contact-tab" class="tab-pane fade px-4 py-5">
                     <p class="text-muted">
@@ -237,8 +231,12 @@
                         Click here to read our :
                         <a href="Thrifts Depot Terms & Conditions for Sellers.pdf">Terms & Conditions for Sellers</a>
                     </p>
+                    <p class="lead mb-0">
+                        Click here to:
+                        <a href="signup.php">Sign Up As Seller</a>
                     </p>
-                    <p class="text-muted">-</p>
+                    </p>
+                    
                 </div>
             </div>
             <!-- End rounded tabs -->
@@ -254,7 +252,7 @@
                     <a id="home2-tab" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true" class="nav-link text-uppercase font-weight-bold mr-sm-3 rounded-0 active">Buyers Sign Up & Account</a>
                 </li>
                 <li class="nav-item flex-sm-fill">
-                    <a id="profile2-tab" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false" class="nav-link text-uppercase font-weight-bold mr-sm-3 rounded-0">Sellers Payments Methods & etc.</a>
+                    <a id="profile2-tab" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false" class="nav-link text-uppercase font-weight-bold mr-sm-3 rounded-0">Buyers Payments Methods & etc.</a>
                 </li>
                 <li class="nav-item flex-sm-fill">
                     <a id="contact2-tab" data-toggle="tab" href="#contact2" role="tab" aria-controls="contact2" aria-selected="false" class="nav-link text-uppercase font-weight-bold rounded-0">Terms & Conditions For Buyers</a>
@@ -262,19 +260,29 @@
             </ul>
             <div id="myTab2Content" class="tab-content">
                 <div id="home2" role="tabpanel" aria-labelledby="home-tab" class="tab-pane fade px-4 py-5 show active">
-                    <p class="leade font-italic">How do I sign up to be a buyer at Thrifts Depot?</p>
+                    <p class="leade font-italic">
+                    <h3>How do I sign up to be a buyer at Thrifts Depot?</h3>
+                    </p>
                     <p class="leade font-italic mb-0">You can go to register page and fill up your info then tick role as buyer and you are ready to buyer in our website.</p>
-                    <p class="leade font-italic">How do I buy my thrift item?</p>
+                    <p class="leade font-italic">
+                    <h3>How do I buy my thrift item?</h3>
+                    </p>
                     <p class="leade font-italic mb-0">You can go to products page > choose your desired item > add to cart > checkout > make payment > wait till seller ship out > received within 1 or 2 weeks.</p>
                 </div>
                 <div id="profile2" role="tabpanel" aria-labelledby="profile-tab" class="tab-pane fade px-4 py-5">
-                    <p class="leade font-italic">What are the payment methods available for buyers?</p>
-                    <p class="leade font-italic mb-0">There are three payments mathods one can choose to make the purchase. Such as COD , Online Banking & Credit and Debit Cards.</p>
+                    <p class="leade font-italic">
+                    <h3>What are the payment methods available for buyers?</h3>
+                    </p>
+                    <p class="leade font-italic mb-0">There are three payments methods one can choose to make the purchase. Such as COD , Online Banking & Credit and Debit Cards.</p>
                 </div>
                 <div id="contact2" role="tabpanel" aria-labelledby="contact-tab" class="tab-pane fade px-4 py-5">
                     <p class="lead mb-0">
                         Click here to read our :
                         <a href="Thrifts Depot Buyers Terms & Conditions.pdf">Terms & Conditions for Buyers</a>
+                    </p>
+                    <p class="lead mb-0">
+                        Click here to:
+                        <a href="signup.php">Sign Up As Buyer</a>
                     </p>
                 </div>
             </div>
@@ -290,11 +298,14 @@
 
 
     <footer>
-        <p>Thrifts Depot 2023<br>
-            <a href="thriftsdepot@gmail.com">thriftsdepot@gmail.com</a> ||
-            <a href="index.php">Homepage</a>
-        </p>
-    </footer>
+    <p>Thrifts Depot 2023<br>
+      <a href="thriftsdepot@gmail.com">thriftsdepot@gmail.com</a> ||
+      <a href="index.php">Homepage</a> ||
+      <a href="about_us.php">About Us</a> ||
+      <a href="contact_us.php">Contact Us</a> ||
+      <a href="faqs.php">FAQs</a> 
+    </p>
+  </footer>
 
 </body>
 

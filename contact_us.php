@@ -319,9 +319,9 @@
     <section class="mb-4">
 
         <!--Section heading-->
-        <h2 class="h1-responsive font-weight-bold text-center my-4">Contact us</h2>
+        <h2 class="h1-responsive font-weight-bold text-center my-4">Hi , How can we help you ?</h2>
         <!--Section description-->
-        <p class="text-center w-responsive mx-auto mb-5">Do you have any questions? </p>
+        <p class="text-center w-responsive mx-auto mb-5">Do you have any questions? Please Don't Hesitate</p>
         <p class="text-center w-responsive mx-auto mb-5">Kindly fill in the form and our admin will contact you through email.</p>
         <div class="row">
 
@@ -336,7 +336,7 @@
                         <div class="col-md-6">
                             <div class="md-form mb-0">
                                 <label for="name">Your name</label>
-                                <input type="text" id="name" name="name" class="form-control">
+                                <input type="text" id="name" name="name" class="form-control" required>
                             </div>
                         </div>
                         <!--Grid column-->
@@ -345,7 +345,7 @@
                         <div class="col-md-6">
                             <div class="md-form mb-0">
                                 <label for="email">Your email</label>
-                                <input type="text" id="email" name="email" class="form-control">
+                                <input type="text" id="email" name="email" class="form-control" required>
                             </div>
                         </div>
                         <!--Grid column-->
@@ -358,7 +358,7 @@
                         <div class="col-md-12">
                             <div class="md-form mb-0">
                                 <label for="subject">Subject</label>
-                                <input type="text" id="subject" name="subject" class="form-control">
+                                <input type="text" id="subject" name="subject" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -372,7 +372,7 @@
 
                             <div class="md-form">
                                 <label for="message">Your message</label>
-                                <textarea id="message" name="message" rows="2" class="form-control md-textarea"></textarea>
+                                <textarea id="message" name="message" rows="2" class="form-control md-textarea" required></textarea><br>
                             </div>
 
                         </div>
@@ -380,7 +380,7 @@
                     <!--Grid row-->
 
                     <div class="text-center text-md-left">
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary">Send</button><br>
                     </div>
                     <div class="status"></div>
                 </form>
@@ -395,11 +395,14 @@
     </section>
     <!--Section: Contact v.2-->
     <footer>
-        <p>Thrifts Depot 2023<br>
-            <a href="thriftsdepot@gmail.com">thriftsdepot@gmail.com</a> ||
-            <a href="index.php">Homepage</a>
-        </p>
-    </footer>
+    <p>Thrifts Depot 2023<br>
+      <a href="thriftsdepot@gmail.com">thriftsdepot@gmail.com</a> ||
+      <a href="index.php">Homepage</a> ||
+      <a href="about_us.php">About Us</a> ||
+      <a href="contact_us.php">Contact Us</a> ||
+      <a href="faqs.php">FAQs</a> 
+    </p>
+  </footer>
 
 </body>
 

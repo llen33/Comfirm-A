@@ -60,12 +60,16 @@ function fetchUserDetails($conn, $userId)
     <title>Admin Panel</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         .header {
@@ -130,13 +134,10 @@ function fetchUserDetails($conn, $userId)
             background-color: #222;
             color: #fff;
             font-size: 14px;
-            bottom: 0;
-            position: fixed;
-            left: 0;
-            right: 0;
             text-align: center;
-            z-index: 999;
             padding: 20px;
+            margin-top: auto;
+            width: 100%;
         }
 
         footer p {
@@ -183,6 +184,52 @@ function fetchUserDetails($conn, $userId)
             text-decoration: none;
             cursor: pointer;
         }
+
+        .card {
+            border: none;
+            margin-bottom: 24px;
+            -webkit-box-shadow: 0 0 13px 0 rgba(236, 236, 241, .44);
+            box-shadow: 0 0 13px 0 rgba(236, 236, 241, .44);
+        }
+
+        .avatar-xs {
+            height: 2.3rem;
+            width: 2.3rem;
+        }
+
+        /*sales chart */
+        .sales-chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            height: 400px;
+            margin: 0 auto;
+            border: 1px solid #eaeaea;
+            border-radius: 4px;
+            padding: 70px;
+            box-sizing: content-box;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            z-index: 1;
+            background-color: #fff;
+        }
+
+        .calendar-container select,
+        .calendar-container input[type="number"],
+        .calendar-container button {
+            margin-right: 10px;
+        }
+
+        #salesChart {
+            margin-top: 70px;
+        }
     </style>
 </head>
 
@@ -197,63 +244,128 @@ function fetchUserDetails($conn, $userId)
     <nav class="navbar">
         <ul>
             <li><a href="admin_panel.php">Home</a></li>
-            <li><a href="user_profile.php">Verify Seller</a></li>
+            <li><a href="get_buyer_details.php">Buyer</a></li>
+            <li><a href="get_seller_details.php">Seller </a></li>
             <li><a href="prod_data_admin.php">Products Database</a></li>
             <li><a href="user_payment.php">Payment</a></li>
+            <li><a href="user_profile.php">Contact Panel</a></li>
         </ul>
     </nav>
 
     <div class="content">
         <!-- Content section -->
         <h2>Admin Panel Content</h2>
-        <p>Check Out Sales Info</p>
+        <p>Check Out Sales Info Using Bar Chart Below</p>
+        <div class="sales-chart-container">
+            <div class="calendar-container">
+                <form id="calendarForm">
+                    <label for="month">Month:</label>
+                    <select id="month" name="month">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
 
-        <table class="table">
-            <!-- Table headers -->
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>User ID</th>
-                    <th>Product ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                    <th>Seller</th>
-                    <th>Buyer</th>
-                    <th>Payment Method</th>
-                    <th>Release Payment</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>{$row['order_id']}</td>";
-                    echo "<td><a class='user-details' href='#' data-userid='{$row['user_id']}'>{$row['user_id']}</a></td>";
-                    echo "<td>{$row['product_id']}</td>";
-                    echo "<td>{$row['name']}</td>";
-                    echo "<td>{$row['price']}</td>";
-                    echo "<td>{$row['quantity']}</td>";
-                    echo "<td>{$row['total']}</td>";
-                    echo "<td>{$row['status']}</td>";
-                    echo "<td>{$row['buyer_status']}</td>";
-                    echo "<td>{$row['payment_method']}</td>";
-                    echo "<td><button class='release-payment' data-orderid='{$row['order_id']}'>Release Payment</button></td>";
-                    echo "</tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+                    <label for="year">Year:</label>
+                    <input type="number" id="year" name="year" min="2000" max="2100" value="2023">
 
-        <!-- Pagination links -->
-        <ul class="pagination">
-            <?php
-            for ($i = 1; $i <= $totalPages; $i++) {
-                echo "<li class='page-item'><a class='page-link' href='admin_panel.php?page={$i}'>{$i}</a></li>";
+                    <button type="submit">Show Sales Data</button> <a href="#" onclick="window.print(); return false;">
+                <i class="fa fa-print"></i>
+                Print the chart
+            </a>
+                </form>
+            </div>
+
+            <canvas id="salesChart"></canvas>
+        </div>
+
+        <script>
+            function updateSalesData(month, year) {
+                // Retrieve sales data for the specified month and year
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var salesData = JSON.parse(xhr.responseText);
+
+                        // Process the sales data
+                        var dates = salesData.dates;
+                        var sales = salesData.sales;
+
+                        // Update the chart with new data
+                        chart.data.labels = dates;
+                        chart.data.datasets[0].data = sales;
+                        chart.update();
+                    }
+                };
+
+                xhr.open("GET", "get_sales_data.php?month=" + month + "&year=" + year, true);
+                xhr.send();
             }
-            ?>
-        </ul>
+
+            // Retrieve the initial sales data
+            var currentDate = new Date();
+            var currentMonth = currentDate.getMonth() + 1;
+            var currentYear = currentDate.getFullYear();
+            updateSalesData(currentMonth, currentYear);
+
+            // Handle form submission
+            var form = document.getElementById('calendarForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                var month = document.getElementById('month').value;
+                var year = document.getElementById('year').value;
+
+                // Update sales data based on selected month and year
+                updateSalesData(month, year);
+            });
+
+            // Create the chart
+            var ctx = document.getElementById('salesChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Sales Count',
+                        data: [],
+                        backgroundColor: 'rgb(0, 82, 204)',
+                        borderColor: 'rgb(0, 0, 0)',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Sales Count'
+                            },
+                            beginAtZero: true,
+                            stepSize: 1,
+                            precision: 0
+                        }
+                    }
+                }
+            });
+        </script>
+
     </div>
 
     <!-- Modal for displaying user details -->
@@ -267,6 +379,7 @@ function fetchUserDetails($conn, $userId)
             </table>
         </div>
     </div>
+
     <footer>
         <p>Thrifts Depot 2023<br>
             <a href="thriftsdepot@gmail.com">thriftsdepot@gmail.com ||</a>
@@ -275,107 +388,6 @@ function fetchUserDetails($conn, $userId)
         </p>
     </footer>
 
-    <script>
-        // When the user clicks on the user_id link, open the modal and fetch user details
-        var userLinks = document.getElementsByClassName("user-details");
-        for (var i = 0; i < userLinks.length; i++) {
-            userLinks[i].addEventListener("click", function(e) {
-                e.preventDefault();
-                var userId = e.target.dataset.userid;
-                fetchUserDetails(userId);
-                document.getElementById("userDetailsModal").style.display = "block";
-            });
-        }
-
-        // Function to fetch user details and populate the modal
-        function fetchUserDetails(userId) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var userDetails = JSON.parse(xhr.responseText);
-                        populateUserDetails(userDetails);
-                    } else {
-                        console.error("Error fetching user details");
-                    }
-                }
-            };
-
-            xhr.open("GET", "fetch_user_details.php?user_id=" + userId, true);
-            xhr.send();
-        }
-
-        // Function to populate the user details in the modal
-        function populateUserDetails(userDetails) {
-            var userDetailsBody = document.getElementById("userDetailsBody");
-            userDetailsBody.innerHTML = ""; // Clear existing data
-
-            if (userDetails) {
-                var row = document.createElement("tr");
-
-
-                row = document.createElement("tr");
-                row.innerHTML = "<td>Username</td><td>" + userDetails.username + "</td>";
-                userDetailsBody.appendChild(row);
-
-                row = document.createElement("tr");
-                row.innerHTML = "<td>Email</td><td>" + userDetails.email + "</td>";
-                userDetailsBody.appendChild(row);
-
-                row = document.createElement("tr");
-                row.innerHTML = "<td>Phone Number</td><td>" + userDetails.phone_number + "</td>";
-                userDetailsBody.appendChild(row);
-
-                row = document.createElement("tr");
-                row.innerHTML = "<td>Home Address</td><td>" + userDetails.home_address + "</td>";
-                userDetailsBody.appendChild(row);
-            } else {
-                var row = document.createElement("tr");
-                row.innerHTML = "<td colspan='2'>User details not found</td>";
-                userDetailsBody.appendChild(row);
-            }
-        }
-
-        // Close the modal when the user clicks the close button
-        var closeButton = document.getElementsByClassName("close")[0];
-        closeButton.addEventListener("click", function() {
-            document.getElementById("userDetailsModal").style.display = "none";
-        });
-
-        // When the user clicks the release payment button, update the admin_status column
-        // When the user clicks the release payment button, update the admin_status column
-        var releasePaymentButtons = document.getElementsByClassName("release-payment");
-        for (var i = 0; i < releasePaymentButtons.length; i++) {
-            releasePaymentButtons[i].addEventListener("click", function(e) {
-                var orderId = e.target.dataset.orderid;
-                updateAdminStatus(orderId);
-            });
-        }
-
-        // Function to update the admin_status column
-        function updateAdminStatus(orderId) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        // Successful update
-                        // Display an alert message
-                        alert("Payment release was done for Order ID: " + orderId);
-                        // You can optionally perform any additional actions here
-                        console.log("Payment released for Order ID: " + orderId);
-                        location.reload(); // Reload the page to reflect the updated admin_status
-                    } else {
-                        // Error occurred
-                        console.error("Error updating admin_status for Order ID: " + orderId);
-                    }
-                }
-            };
-
-            xhr.open("POST", "update_admin_status.php", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.send("order_id=" + orderId);
-        }
-    </script>
 
     <?php
     if (isset($_POST['Logout'])) {
