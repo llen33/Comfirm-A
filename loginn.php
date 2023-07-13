@@ -1,11 +1,21 @@
 <?php
-
 session_start();
 include "config.php";
 
-// check whether the user enters username and password
+// Check if user is already logged in, redirect if true
+if (isset($_SESSION['username'])) {
+    if ($_SESSION['role'] === 'seller') {
+        header("Location: index_seller.php");
+    } elseif ($_SESSION['role'] === 'buyer') {
+        header("Location: index_buyer.php");
+    }
+    exit;
+}
+
+// Check whether the user enters a username and password
 if (isset($_POST['username']) && isset($_POST['password'])) {
-    function validate($data) {
+    function validate($data)
+    {
         $data = trim($data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
@@ -23,54 +33,60 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         exit();
     } else {
         // Scan the database
-        $sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+        $sql = "SELECT * FROM users WHERE username='$username'";
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) === 1) {
             $row = mysqli_fetch_assoc($result);
-            $_SESSION['username'] = $row['username'];
-            $_SESSION['role'] = $row['role'];
+            if ($row['password'] === $password) {
+                $_SESSION['username'] = $row['username'];
+                $_SESSION['role'] = $row['role'];
+                $_SESSION['user_id'] = $row['user_id']; // Add user_id to the session
 
-            if ($row['role'] === 'seller') {
-                // Fetch the seller ID from the seller table
-                $seller_id_query = "SELECT seller_id FROM seller WHERE user_id = " . $row['user_id'];
-                $seller_id_result = mysqli_query($conn, $seller_id_query);
+                if ($row['role'] === 'seller') {
+                    // Fetch the seller ID from the seller table
+                    $seller_id_query = "SELECT seller_id FROM seller WHERE user_id = " . $row['user_id'];
+                    $seller_id_result = mysqli_query($conn, $seller_id_query);
 
-                if (mysqli_num_rows($seller_id_result) === 1) {
-                    $seller = mysqli_fetch_assoc($seller_id_result);
-                    $_SESSION['seller_id'] = $seller['seller_id'];
-                } else {
-                    $_SESSION['seller_id'] = null; // Set seller_id to null instead of redirecting
+                    if (mysqli_num_rows($seller_id_result) === 1) {
+                        $seller = mysqli_fetch_assoc($seller_id_result);
+                        $_SESSION['seller_id'] = $seller['seller_id'];
+                    } else {
+                        header("Location: login.php?error=Failed to fetch seller ID");
+                        exit();
+                    }
+
+                    // Redirect to seller homepage
+                    header('Location: index_seller.php');
+                    exit();
+                } elseif ($row['role'] === 'buyer') {
+                    // Fetch the buyer ID from the buyer table
+                    $buyer_id_query = "SELECT buyer_id FROM buyer WHERE user_id = " . $row['user_id'];
+                    $buyer_id_result = mysqli_query($conn, $buyer_id_query);
+
+                    if (mysqli_num_rows($buyer_id_result) === 1) {
+                        $buyer = mysqli_fetch_assoc($buyer_id_result);
+                        $_SESSION['buyer_id'] = $buyer['buyer_id'];
+                    } else {
+                        header("Location: login.php?error=Failed to fetch buyer ID");
+                        exit();
+                    }
+
+                    // Redirect to buyer homepage
+                    header('Location:index_buyer.php');
+                    exit();
                 }
-
-                // Redirect to seller homepage
-                header('Location: index_seller.php');
-                exit();
-            } elseif ($row['role'] === 'buyer') {
-                // Fetch the buyer ID from the buyer table
-                $buyer_id_query = "SELECT buyer_id FROM buyer WHERE user_id = " . $row['user_id'];
-                $buyer_id_result = mysqli_query($conn, $buyer_id_query);
-
-                if (mysqli_num_rows($buyer_id_result) === 1) {
-                    $buyer = mysqli_fetch_assoc($buyer_id_result);
-                    $_SESSION['buyer_id'] = $buyer['buyer_id'];
-                } else {
-                    $_SESSION['buyer_id'] = null; // Set buyer_id to null instead of redirecting
-                }
-
-                // Redirect to buyer homepage
-                header('Location: index_buyer.php');
+            } else {
+                header("Location: login.php?error=Incorrect password");
                 exit();
             }
+        } else {
+            header("Location: login.php?error=Incorrect username");
+            exit();
         }
-
-        // Redirect to login page with error message for all failure cases
-        header("Location: login.php?error=Incorrect username or password");
-        exit();
     }
 } else {
     header("Location: login.php");
     exit();
 }
-
 ?>
